@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - EyeGuard AI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 960px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        h2 span {
+            color: #0a84ff;
+        }
+        img {
+            display: block;
+            margin: 30px auto;
+            max-width: 400px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 40px;
+            margin-bottom: 20px;
+        }
+        li {
+            line-height: 1.8;
+            color: #444;
+        }
+        .download-btn {
+            display: block;
+            width: 250px;
+            margin: 30px auto;
+            text-align: center;
+            background-color: #0a84ff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .download-btn:hover {
+            background-color: #005bb5;
+        }
+        .section-title {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EyeGuard AI - Prediction Result</h1>
+        <h2>Severity Level: <span>{{ prediction }}</span></h2>
+
+        <img src="{{ image_path }}" alt="Uploaded Retina Image">
+
+        <h3 class="section-title">Medical Advice:</h3>
+        <ul>
+            {% for point in advice.medical %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3 class="section-title">Tips to Reduce Progression:</h3>
+        <ul>
+            {% for point in advice.tips %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3 class="section-title">Foods to Eat:</h3>
+        <ul>
+            {% for point in advice.eat %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3 class="section-title">Foods to Avoid:</h3>
+        <ul>
+            {% for point in advice.avoid %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3 class="section-title">Doctor Visit Recommendation:</h3>
+        <p style="text-align: center; font-weight: bold; color: #c0392b;">{{ advice.doctor_visit }}</p>
+
+        <a href="{{ url_for('download_pdf', prediction=prediction, image_path=image_path) }}" class="download-btn">
+            Download PDF Medical Report
+        </a>
+    </div>
+</body>
+</html>

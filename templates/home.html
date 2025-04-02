@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyeGuard AI</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5E90C4;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            background-color: #A8C3E3;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 10px;
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Grid Layout */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Box Styling */
+        .box {
+            width: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #2A3F5F;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .box img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .desc {
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>EyeGuard AI</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Settings</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Welcome, User!</h2>
+        <p>Empowering Vision with AI-Powered Eye Screening.</p>
+
+        <div class="container">
+            <div class="box" onclick="location.href='eye_screening.html'">
+                <img src="file:///Users/anishkkhaire/Desktop/eyeguard-newww/imagess/eyescreening.jpg" alt="AI Eye Screening">
+                <div class="desc">
+                    <h3>What is AI Eye Screening?</h3>
+                    AI-powered screening detects diabetic retinopathy at an early stage.
+                </div>
+            </div>
+
+            <div class="box" onclick="location.href='diabetes_care.html'">
+                <img src="file:///Users/anishkkhaire/Desktop/eyeguard-newww/imagess/diabetescare.jpg" alt="Diabetes Care">
+                <div class="desc">
+                    <h3>Diabetes Care</h3>
+                    Comprehensive diabetes care strategies for better health.
+                </div>
+            </div>
+
+            <div class="box" onclick="location.href='diabetes_prediction.html'">
+                <img src="file:///Users/anishkkhaire/Desktop/eyeguard-newww/imagess/diabetic-prediction.jpg" alt="Diabetes Predictions">
+                <div class="desc">
+                    <h3>Diabetes Predictions</h3>
+                    AI predicts the progression of diabetic retinopathy.
+                </div>
+            </div>
+
+            <div class="box" onclick="location.href='aichatbot.html'">
+                <img src="file:///Users/anishkkhaire/Desktop/eyeguard-newww/imagess/aichatbot.jpg" alt="AI Chatbot">
+                <div class="desc">
+                    <h3>AI Chatbot</h3>
+                    Get real-time answers for your eye care queries.
+                </div>
+            </div>
+
+            <div class="box" onclick="location.href='prediction_history.html'">
+                <img src="file:///Users/anishkkhaire/Desktop/eyeguard-newww/imagess/prediction-history.jpg" alt="Prediction History">
+                <div class="desc">
+                    <h3>Prediction History</h3>
+                    Review past AI predictions for treatment monitoring.
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

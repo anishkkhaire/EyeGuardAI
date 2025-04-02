@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyeGuard AI - Chatbot</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5E90C4;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            background-color: #A8C3E3;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 10px;
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Chatbot Container */
+        .chat-container {
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+            background-color: #1E324D;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chat Box */
+        .chat-box {
+            height: 350px;
+            overflow-y: auto;
+            background: white;
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .chat-box p {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+
+        .chat-box .ai {
+            background-color: #e5e5e5;
+            text-align: left;
+        }
+
+        .chat-box .user {
+            background-color: #4cb5f5;
+            color: white;
+            text-align: right;
+            margin-left: auto;
+        }
+
+        /* Input Field */
+        .user-input {
+            width: 70%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .send-btn {
+            padding: 10px 15px;
+            background-color: #4cb5f5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Scrollbar */
+        .chat-box::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background-color: #4cb5f5;
+            border-radius: 10px;
+        }
+        
+        /* Typing indicator */
+        .typing-indicator span {
+            display: inline-block;
+            animation: typing 1.5s infinite;
+        }
+        
+        @keyframes typing {
+            0% { content: "."; }
+            33% { content: ".."; }
+            66% { content: "..."; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>EyeGuard AI - AI Chatbot</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/diabetes_care">Diabetes Care</a>
+            <a href="/diabetes_prediction">Diabetes Predictions</a>
+            <a href="/prediction_history">Prediction History</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>AI-Powered Chatbot</h2>
+        <p>Get real-time answers for your eye care and diabetes-related queries.</p>
+
+        <div class="chat-container">
+            <div class="chat-box" id="chat-box">
+                <p class="ai"><strong>AI:</strong> Hello! How can I assist you today?</p>
+            </div>
+            <input type="text" id="user-input" class="user-input" placeholder="Type your message...">
+            <button class="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+    </main>
+
+    <script>
+        // Store the original function for fallback
+        function getBasicAIResponse(message) {
+            message = message.toLowerCase();
+
+            if (message.includes("eye")) {
+                return "Maintaining eye health involves regular check-ups and reducing screen time.";
+            }
+            if (message.includes("diabetes")) {
+                return "It's important to maintain a balanced diet and exercise regularly.";
+            }
+            if (message.includes("image") || message.includes("upload")) {
+                return "You can upload your eye image on the predictions page.";
+            }
+            return "I'm here to help! You can ask me anything related to diabetes, eye care, or general health.";
+        }
+        
+        // Updated sendMessage function with Gemini API capability
+        async function sendMessage() {
+            let userInput = document.getElementById("user-input").value;
+            let chatBox = document.getElementById("chat-box");
+            
+            if (userInput.trim() !== "") {
+                // Append User Message
+                chatBox.innerHTML += `<p class="user"><strong>You:</strong> ${userInput}</p>`;
+                document.getElementById("user-input").value = "";
+                
+                // Show typing indicator
+                chatBox.innerHTML += `<p class="ai typing-indicator"><strong>AI:</strong> <span>...</span></p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                try {
+                    // Try to get a response from the AI backend
+                    const response = await getAIResponse(userInput);
+                    
+                    // Remove typing indicator
+                    const typingIndicator = document.querySelector(".typing-indicator");
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+                    
+                    // Display AI response
+                    chatBox.innerHTML += `<p class="ai"><strong>AI:</strong> ${response}</p>`;
+                } catch (error) {
+                    console.error("Error getting AI response:", error);
+                    
+                    // Remove typing indicator
+                    const typingIndicator = document.querySelector(".typing-indicator");
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+                    
+                    // Fall back to basic responses if API fails
+                    const fallbackResponse = getBasicAIResponse(userInput);
+                    chatBox.innerHTML += `<p class="ai"><strong>AI:</strong> ${fallbackResponse}</p>`;
+                }
+                
+                // Scroll to bottom
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        // Function to get response from backend API
+        async function getAIResponse(userMessage) {
+            try {
+                const response = await fetch('/chat_response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.response;
+            } catch (error) {
+                console.error("Error fetching from backend:", error);
+                // If backend fails, fall back to basic responses
+                return getBasicAIResponse(userMessage);
+            }
+        }
+        
+        // Add event listener for enter key
+        document.getElementById("user-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

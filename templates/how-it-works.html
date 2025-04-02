@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works - EyeGuard AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* Color Theme */
+        :root {
+            --primary-blue: #5E8EB3;  /* Darker Pastel Blue */
+            --navbar-bg: rgba(255, 255, 255, 0.1); /* Transparent Navbar */
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+
+        /* NAVBAR (Matching Index Page) */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: var(--navbar-bg);
+            color: var(--white);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px); /* Glass Effect */
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+
+        nav ul li a:hover {
+            color: #003366;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 10px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            padding: 120px 20px 50px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 6px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .step i {
+            font-size: 30px;
+            color: var(--white);
+        }
+
+        .step-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 15px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">EyeGuard AI</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="how_it_works.html">How It Works</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>How EyeGuard AI Works</h1>
+        <p>Follow these simple steps to detect diabetic retinopathy using AI.</p>
+
+        <div class="step">
+            <i class="fas fa-upload"></i>
+            <div class="step-content">
+                <h3>1. Upload Retinal Image</h3>
+                <p>Patients securely upload their high-resolution retinal images.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <i class="fas fa-brain"></i>
+            <div class="step-content">
+                <h3>2. AI Analysis</h3>
+                <p>Our AI model analyzes the image to detect diabetic retinopathy.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <i class="fas fa-stethoscope"></i>
+            <div class="step-content">
+                <h3>3. Doctor Review</h3>
+                <p>A licensed ophthalmologist verifies the AI's diagnosis and provides insights.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <i class="fas fa-file-medical"></i>
+            <div class="step-content">
+                <h3>4. Receive Diagnosis Report</h3>
+                <p>Patients receive a report with AI predictions and doctor recommendations.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 EyeGuard AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>

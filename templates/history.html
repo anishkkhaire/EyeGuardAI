@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History</title>
+</head>
+<body>
+    <h2>Prediction History</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Prediction</th>
+                <th>Timestamp</th>
+                <th>Report</th>
+            </tr>
+        </thead>
+        <tbody id="historyTable">
+            <!-- Data will be added dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        fetch('/history')
+            .then(response => response.json())
+            .then(data => {
+                const table = document.getElementById('historyTable');
+                data.forEach(entry => {
+                    const row = `<tr>
+                        <td><img src="${entry.image_file}" width="100"></td>
+                        <td>${entry.prediction}</td>
+                        <td>${new Date(entry.timestamp).toLocaleString()}</td>
+                        <td><a href="${entry.pdf_path}" target="_blank">View Report</a></td>
+                    </tr>`;
+                    table.innerHTML += row;
+                });
+            })
+            .catch(error => console.error("Error fetching history:", error));
+    </script>
+</body>
+</html>

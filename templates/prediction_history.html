@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5E90C4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        header {
+            background-color: #A8C3E3;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #2A3F5F;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #A8C3E3;
+            text-align: center;
+            color: white;
+        }
+
+        th {
+            background-color: #4cb5f5;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+
+        tr:hover {
+            background-color: #1A2B48;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .download-btn, .delete-btn {
+            background-color: #4cb5f5;
+            border: none;
+            padding: 8px 15px;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn {
+            background-color: #ff3b3b;
+        }
+
+        .download-btn:hover {
+            background-color: #3a98d5;
+            transform: scale(1.05);
+        }
+
+        .delete-btn:hover {
+            background-color: #e02626;
+            transform: scale(1.05);
+        }
+
+        .empty-message {
+            margin-top: 40px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>    
+<body>
+    <header>
+        <h1>EyeGuardAI - Prediction History</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="diabetes_prediction.html">Diabetes Prediction</a>
+            <a href="diabetes_care.html">Diabetes Care</a>
+            <a href="aichatbot.html">AI Chatbot</a>
+        </nav>
+    </header>
+
+    <h2>Your Past Predictions</h2>
+    <div id="history-container">
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Severity</th>
+                    <th>Uploaded Image</th>
+                    <th>Download Report</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="history-body">
+                <!-- User data will be dynamically added here -->
+            </tbody>
+        </table>
+        <p class="empty-message" id="empty-message" style="display:none;">
+            No predictions found. Please upload and predict from the home page.
+        </p>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        let userEmail = '';
+    
+        function checkLoginStatus() {
+            // If you're opening the file directly, use absolute URLs
+            const baseUrl = window.location.protocol === 'file:' 
+                ? 'http://localhost:3000' 
+                : '';
+                
+            return fetch(`${baseUrl}/check-login`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.loggedIn) {
+                    // If email is in localStorage, use it as a fallback
+                    userEmail = localStorage.getItem('email');
+                    if (!userEmail) {
+                        window.location.href = "login.html";
+                        throw new Error('Not logged in');
+                    }
+                    return userEmail;
+                }
+                userEmail = data.email;
+                return data.email;
+            });
+        }
+    
+        // Fetch prediction history from the server
+        document.addEventListener("DOMContentLoaded", function() {
+            const historyTable = document.getElementById("history-body");
+            const emptyMessage = document.getElementById("empty-message");
+    
+            // If you're opening the file directly, use absolute URLs
+            const baseUrl = window.location.protocol === 'file:' 
+                ? 'http://localhost:3000' 
+                : '';
+    
+            checkLoginStatus()
+                .then(email => {
+                    console.log("Fetching history for email:", email);
+                    return fetch(`${baseUrl}/prediction-history?email=${encodeURIComponent(email)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Received data:", data);
+    
+                    if (data.length === 0) {
+                        emptyMessage.style.display = "block";
+                        return;
+                    }
+    
+                    historyTable.innerHTML = '';
+    
+                    data.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.setAttribute("data-id", item.id);
+    
+                        const date = new Date(item.timestamp);
+                        const formattedDate = date.toISOString().split("T")[0] + " " + date.toLocaleTimeString();
+    
+                        // Get just the filename without any path
+                        const imageName = item.image_file || 'No image';
+                        
+                        // Create the view and download buttons with appropriate URLs
+                        const baseUrl = window.location.protocol === 'file:' 
+                            ? 'http://localhost:3000' 
+                            : '';
+                        
+                        // Create image cell with a view button
+                        const imageCell = item.image_file 
+                            ? `<button class="download-btn" onclick="viewImage('${baseUrl}/view-image/${item.image_file}')">View Image</button>`
+                            : imageName;
+                            
+                        // Create report cell with a download button if available
+                        const reportCell = item.pdf_path 
+                            ? `<button class="download-btn" onclick="downloadReport('${baseUrl}/download-report/${item.pdf_path}')">Download</button>` 
+                            : 'N/A';
+    
+                        row.innerHTML = `
+                            <td>${formattedDate}</td>
+                            <td>${item.prediction || 'Unknown'}</td>
+                            <td>${imageName} ${imageCell}</td>
+                            <td>${reportCell}</td>
+                            <td><button class="delete-btn" onclick="deletePrediction(${item.id})">Delete</button></td>
+                        `;
+    
+                        historyTable.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching prediction history:', error);
+                    if (error.message !== 'Not logged in') {
+                        emptyMessage.textContent = "An error occurred while loading predictions.";
+                        emptyMessage.style.display = "block";
+                    }
+                });
+        });
+    
+        // Function to delete a prediction
+        function deletePrediction(predictionId) {
+            if (!confirm("Are you sure you want to delete this prediction?")) {
+                return;
+            }
+    
+            const baseUrl = window.location.protocol === 'file:' 
+                ? 'http://localhost:3000' 
+                : '';
+    
+            fetch(`${baseUrl}/delete-prediction/${predictionId}`, { method: 'DELETE' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete prediction: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.message);
+                document.querySelector(`tr[data-id="${predictionId}"]`).remove();
+                
+                // Check if table is empty and show message if needed
+                if (document.getElementById("history-body").children.length === 0) {
+                    document.getElementById("empty-message").style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting prediction:', error);
+                alert('Failed to delete prediction. Please try again.');
+            });
+        }
+    
+        // Function to download a report
+        function downloadReport(url) {
+            if (!url) {
+                alert("Report not available.");
+                return;
+            }
+            window.open(url, "_blank");
+        }
+        
+        // Function to view an image in a new window or lightbox
+        function viewImage(url) {
+            if (!url) {
+                alert("Image not available.");
+                return;
+            }
+            
+            /*Option 1: Simple - Open in a new tab
+            window.open(url, "_blank");*/
+            
+            //Option 2: Create a lightbox (uncomment to use)
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.zIndex = '1000';
+            
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.maxWidth = '90%';
+            img.style.maxHeight = '90%';
+            img.style.border = '2px solid white';
+            
+            overlay.appendChild(img);
+            overlay.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+            
+            document.body.appendChild(overlay);
+        
+        }
+    </script>
+</body>
+</html>
